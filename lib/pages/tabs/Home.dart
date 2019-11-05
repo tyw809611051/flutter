@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../services/ScreenAdaper.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -38,14 +38,14 @@ class _HomePageState extends State<HomePage> {
   // 小标题
   Widget _titleWidget(value) {
     return Container(
-      height: ScreenUtil.getInstance().setHeight(40),
-      margin: EdgeInsets.only(left: ScreenUtil.getInstance().setWidth(10)),
-      padding: EdgeInsets.only(left: ScreenUtil.getInstance().setWidth(10)),
+      height: ScreenAdaper.height(40),
+      margin: EdgeInsets.only(left: ScreenAdaper.width(10)),
+      padding: EdgeInsets.only(left: ScreenAdaper.width(10)),
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(
             color: Colors.red,
-            width: ScreenUtil.getInstance().setHeight(10),
+            width: ScreenAdaper.height(10),
           ),
         ), 
       ),
@@ -57,7 +57,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
+    // 屏幕适配
+    ScreenAdaper.init(context);
+
     return ListView(
       children: <Widget>[
         _swiperWidget(),
