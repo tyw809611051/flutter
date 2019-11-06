@@ -84,6 +84,65 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  // 热门推荐
+  Widget _recProductItemWidget() {
+    var itemWidth = (ScreenAdaper.getScreenWidth() - 30) / 2;
+
+    return Container(
+      padding: EdgeInsets.all(10),
+      width: itemWidth,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color.fromRGBO(233, 233, 233, 0.9),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            child: Image.network(
+              "https://www.itying.com/images/flutter/list1.jpg",
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: ScreenAdaper.height(20)),
+            child: Text(
+              "2019夏季新款气质高贵洋气阔太太有女人味中长款宽松大码",
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: Colors.black54),
+              ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: ScreenAdaper.height(10)),
+            child: Stack(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "¥199",
+                    style: TextStyle(color: Colors.red,fontSize: 16),
+                    ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "¥299",
+                    style: TextStyle(color: Colors.black54,fontSize: 14,decoration: TextDecoration.lineThrough),
+                    ),
+                ),
+              ],
+            ),
+          ),
+          
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // 屏幕适配
@@ -94,7 +153,22 @@ class _HomePageState extends State<HomePage> {
         _swiperWidget(),
         SizedBox(height: 10,),
         _titleWidget('猜你喜欢'),
-        _hotProductListWidget(),
+        _hotProductListWidget(),  
+        _titleWidget('热门推荐'),
+
+        Container(
+          padding: EdgeInsets.all(10),
+          child: Wrap(
+            runSpacing: 10,
+            spacing: 10,
+            children: <Widget>[
+              _recProductItemWidget(),
+              _recProductItemWidget(),
+              _recProductItemWidget(),
+              _recProductItemWidget(),
+            ],
+          ),
+        ),
       ],
     );
   }
