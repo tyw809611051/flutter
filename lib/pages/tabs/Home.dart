@@ -55,6 +55,35 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // 热销商品
+  Widget _hotProductListWidget() {
+    return Container(
+      height: ScreenAdaper.height(234),
+      padding: EdgeInsets.all(ScreenAdaper.width(20)),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context,index) {
+          return Column(
+            children: <Widget>[
+              // 图片
+              Container(
+                height: ScreenAdaper.height(140),
+                width: ScreenAdaper.height(140),
+                margin: EdgeInsets.only(right: ScreenAdaper.width(21)),
+                child: Image.network("https://www.itying.com/images/flutter/hot${index+1}.jpg",fit: BoxFit.cover,),
+              ),
+              // 文本
+              Container(
+                padding: EdgeInsets.only(top: ScreenAdaper.height(10)),
+                child: Text("热销商品"),
+              ),
+            ],
+          );
+        },
+        itemCount: 10,
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     // 屏幕适配
@@ -65,6 +94,7 @@ class _HomePageState extends State<HomePage> {
         _swiperWidget(),
         SizedBox(height: 10,),
         _titleWidget('猜你喜欢'),
+        _hotProductListWidget(),
       ],
     );
   }
