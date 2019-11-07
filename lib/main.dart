@@ -17,6 +17,7 @@ class _MyAppState extends State<MyApp> {
       //  home: Tabs()
       initialRoute: '/',
       onGenerateRoute: onGenerateRoute,
+//      debugShowCheckedModeBanner: false,
     );
   }
 }

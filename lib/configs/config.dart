@@ -1,3 +1,3 @@
 class Config {
-  static String apiUrl="http://jd.itying.com";
+  static String apiUrl="http://jd.itying.com/";
 }
