@@ -1,6 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:dio/dio.dart';
+import 'package:network_to_file_image/network_to_file_image.dart';
+
 import '../../services/ScreenAdaper.dart';
+import '../../configs/config.dart';
+import '../../models/FocusModel.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -10,6 +17,35 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List _focusData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getFocusData();
+  }
+
+  _getFocusData() async {
+    var api = '${Config.apiUrl}/api/focus';
+
+    Dio dio = Dio(); // 使用默认配置
+
+    // 配置dio实例
+    dio.options.baseUrl = "http://jd.itying.com";
+    dio.options.connectTimeout = 5000; //5s
+    dio.options.receiveTimeout = 3000;
+    try {
+      Response response = await dio.get('/api/focus');
+      print(response);
+    } catch (e) {
+      print(e);
+    }
+    // var focusList = FocusModel.fromJson(result.data);
+    // setState(() {
+    //   this._focusData = focusList.result;
+    // });
+  }
+
   // 轮播图
   Widget _swiperWidget() {
     List<Map> imagerList = [
@@ -22,9 +58,15 @@ class _HomePageState extends State<HomePage> {
         aspectRatio: 2 / 1,
         child: Swiper(
           itemBuilder: (BuildContext context, int index) {
-            return new Image.network(
-              imagerList[index]['url'],
-              fit: BoxFit.fill,
+            // return new Image.network(
+            //   imagerList[index]['url'],
+            //   fit: BoxFit.fill,
+            // );
+            return Image(
+              image: NetworkToFileImage(
+                url: imagerList[index]['url'],
+                file: File("asset/imgs/hot.jpg"),
+              ),
             );
           },
           itemCount: imagerList.length,
@@ -47,9 +89,10 @@ class _HomePageState extends State<HomePage> {
             color: Colors.red,
             width: ScreenAdaper.height(10),
           ),
-        ), 
+        ),
       ),
-      child: Text(value,
+      child: Text(
+        value,
         style: TextStyle(color: Colors.black45),
       ),
     );
@@ -62,7 +105,7 @@ class _HomePageState extends State<HomePage> {
       padding: EdgeInsets.all(ScreenAdaper.width(20)),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context,index) {
+        itemBuilder: (context, index) {
           return Column(
             children: <Widget>[
               // 图片
@@ -70,7 +113,10 @@ class _HomePageState extends State<HomePage> {
                 height: ScreenAdaper.height(140),
                 width: ScreenAdaper.height(140),
                 margin: EdgeInsets.only(right: ScreenAdaper.width(21)),
-                child: Image.network("https://www.itying.com/images/flutter/hot${index+1}.jpg",fit: BoxFit.cover,),
+                child: Image.network(
+                  "https://www.itying.com/images/flutter/hot${index + 1}.jpg",
+                  fit: BoxFit.cover,
+                ),
               ),
               // 文本
               Container(
@@ -114,7 +160,7 @@ class _HomePageState extends State<HomePage> {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: Colors.black54),
-              ),
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(top: ScreenAdaper.height(10)),
@@ -124,20 +170,22 @@ class _HomePageState extends State<HomePage> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "¥199",
-                    style: TextStyle(color: Colors.red,fontSize: 16),
-                    ),
+                    style: TextStyle(color: Colors.red, fontSize: 16),
+                  ),
                 ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
                     "¥299",
-                    style: TextStyle(color: Colors.black54,fontSize: 14,decoration: TextDecoration.lineThrough),
-                    ),
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 14,
+                        decoration: TextDecoration.lineThrough),
+                  ),
                 ),
               ],
             ),
           ),
-          
         ],
       ),
     );
@@ -151,11 +199,12 @@ class _HomePageState extends State<HomePage> {
     return ListView(
       children: <Widget>[
         _swiperWidget(),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         _titleWidget('猜你喜欢'),
-        _hotProductListWidget(),  
+        _hotProductListWidget(),
         _titleWidget('热门推荐'),
-
         Container(
           padding: EdgeInsets.all(10),
           child: Wrap(
