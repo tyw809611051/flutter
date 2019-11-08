@@ -15,10 +15,15 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   List _focusData = [];
   List _hotProductList = [];
   List _bestProductList = [];
+
+    @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+  
   @override
   void initState() {
     super.initState();
@@ -298,4 +303,6 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
+
+
 }

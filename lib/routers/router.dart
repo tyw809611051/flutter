@@ -1,8 +1,11 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:flutter_cisslab/pages/ProductList.dart'; 
 import '../pages/tabs/Tabs.dart';
+import '../pages/ProductList.dart';
 //配置路由 
 final routes={ 
-  '/': (context) => Tabs(), 
+  '/': (context) => Tabs(),
+  '/productList': (context,{arguments}) => ProductList(arguments:arguments) ,
 }; 
 
 var onGenerateRoute = (RouteSettings settings){

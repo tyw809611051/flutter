@@ -136,7 +136,13 @@ class _CategoryPageState extends State<CategoryPage> {
                 itemBuilder: (context, index) {
                   String pic = this._rightCateList[index].pic;
                   pic = Config.apiUrl+pic.replaceAll('\\', '/');
-                  return Container(
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/productList',arguments: {
+                        "cid":this._rightCateList[index].sId,
+                      });
+                    },
+                    child: Container(
                     //  padding: EdgeInsets.all(10),
                     child: Column(
                       children: <Widget>[
@@ -153,6 +159,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         ),
                       ],
                     ),
+                  ),
                   );
                 },
               ),
