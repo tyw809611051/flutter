@@ -15,9 +15,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       //  home: Tabs()
-      initialRoute: '/',
+      initialRoute: '/search',
       onGenerateRoute: onGenerateRoute,
 //      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.white,
+      ),
     );
   }
 }

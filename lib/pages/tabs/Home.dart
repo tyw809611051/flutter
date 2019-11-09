@@ -289,7 +289,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
   @override
   Widget build(BuildContext context) {
-    ScreenAdaper.init(context);
+    // ScreenAdaper.init(context);
 
     return ListView(
       children: <Widget>[
