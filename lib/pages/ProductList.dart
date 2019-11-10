@@ -27,9 +27,16 @@ class _ProductListState extends State<ProductList> {
   bool flag = true;
   bool _hasMore = true;
   int _pageSize = 8;
+  int _selectHeader = 1;
+
+  // 配置search搜索框的值
+  var _initKeywordsController = TextEditingController();
   @override
   void initState() {
     super.initState();
+        // 给search框赋值
+    widget.arguments['keywords'] == null ? this._initKeywordsController.text = "" : this._initKeywordsController.text = widget.arguments['keywords'];
+
     _getProductListData();
 
     // 监听滚动条滚动事件
@@ -40,8 +47,8 @@ class _ProductListState extends State<ProductList> {
           _getProductListData();
         }
       }
-      ;
     });
+
   }
 
   // 二级导航数据
@@ -52,15 +59,19 @@ class _ProductListState extends State<ProductList> {
     {"id": 4, "title": "筛选"},
   ];
 
-  int _selectHeader = 1;
 
   // 获取商品列表的数据
   _getProductListData() async {
     setState(() {
       this.flag = false;
     });
-    var api =
-        "${Config.apiUrl}api/plist?cid=${widget.arguments['cid']}&page=${this._page}&pageSize=${this._pageSize}&sort=${this._sort}";
+
+    var api;
+    if (widget.arguments["keywords"] == null) {
+      api = "${Config.apiUrl}api/plist?cid=${widget.arguments['cid']}&page=${this._page}&pageSize=${this._pageSize}&sort=${this._sort}";
+    } else {
+      api = "${Config.apiUrl}api/plist?search=${this._initKeywordsController.text}&page=${this._page}&pageSize=${this._pageSize}&sort=${this._sort}";
+    }
     print(api);
     var response = await Dio().get(api);
 
@@ -267,9 +278,41 @@ class _ProductListState extends State<ProductList> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text("商品列表"),
+          title: Container(
+            height: ScreenAdaper.height(68),
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(233, 233, 233, 0.8),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: TextField(
+              controller: _initKeywordsController,
+              autofocus: false,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(30),
+              )),
+              onChanged: (value) {
+                setState(() {
+                  this._initKeywordsController.text = value;
+                });
+                
+              },
+            ),
+          ),
           actions: <Widget>[
-            Text(""),
+            InkWell(
+              child: Container(
+                height: ScreenAdaper.height(68),
+                width: ScreenAdaper.width(80),
+                child: Row(
+                  children: <Widget>[Text("搜索")],
+                ),
+              ),
+              onTap: () {
+                this._subHeaderChange(1);
+              },
+            )
           ],
         ),
         endDrawer: Drawer(

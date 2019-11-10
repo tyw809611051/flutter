@@ -3,11 +3,13 @@ import 'package:flutter_cisslab/pages/ProductList.dart';
 import '../pages/tabs/Tabs.dart';
 import '../pages/ProductList.dart';
 import '../pages/Search.dart';
+import '../pages/ProductContent.dart';
 //配置路由 
 final routes={ 
   '/': (context) => Tabs(),
   '/search': (context) => SearchPage(),
   '/productList': (context,{arguments}) => ProductList(arguments:arguments) ,
+  '/productContent': (context,{arguments}) => ProductContent(arguments:arguments) ,
 }; 
 
 var onGenerateRoute = (RouteSettings settings){
