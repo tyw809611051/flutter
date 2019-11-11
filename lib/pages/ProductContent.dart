@@ -98,7 +98,7 @@ class _ProductContentState extends State<ProductContent> {
             TabBarView(
               children: <Widget>[
                 ProductContentFirst(this._productContentList),
-                ProductContentSecond(),
+                ProductContentSecond(this._productContentList),
                 ProductContentThird(),
               ],
             ),

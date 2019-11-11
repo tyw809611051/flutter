@@ -12,47 +12,123 @@ class ProductContentFirst extends StatefulWidget {
   _ProductContentFirstState createState() => _ProductContentFirstState();
 }
 
-class _ProductContentFirstState extends State<ProductContentFirst> {
+class _ProductContentFirstState extends State<ProductContentFirst>
+    with AutomaticKeepAliveClientMixin {
   ProductContentItem _productContent;
 
   List _attr = [];
+
+  String _selectedAttr;
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
     this._productContent = widget._productContentList[0];
 
     this._attr = this._productContent.attr;
+
+    this._initAttr();
+
+    
   }
 
-  List<Widget> _getAttrItemWidget(attrItem) {
+  // 初始化attr，格式化数据
+  _initAttr() {
+    var attr = this._attr;
+    for (var i = 0; i < attr.length; i++) {
+      for (var j = 0; j < attr[i].list.length; j++) {
+        if (j == 0) {
+          attr[i].attrList.add({
+            "title": attr[i].list[j],
+            "checked": true,
+          });
+        } else {
+          attr[i].attrList.add({
+            "title": attr[i].list[j],
+            "checked": false,
+          });
+        }
+      }
+    }
+
+    this._getSelectedAttrValue();
+  }
+
+  // 改变属性值
+  _changeAttr(cate, title,setBottomState) {
+    var attr = this._attr;
+    for (var i = 0; i < attr.length; i++) {
+      if (attr[i].cate == cate) {
+        for (var j = 0; j < attr[i].attrList.length; j++) {
+          attr[i].attrList[j]['checked'] = false;
+          if (title == attr[i].attrList[j]['title']) {
+            attr[i].attrList[j]['checked'] = true;
+          }
+        }
+      }
+    }
+
+    setBottomState(() {
+      this._attr = attr;
+    });
+
+    this._getSelectedAttrValue();
+  }
+
+  // 获取选中的值
+  _getSelectedAttrValue() {
+    var _list = this._attr;
+    List tempArr = [];
+    for (var i = 0; i < _list.length; i++) {
+ 
+      for (var j = 0; j < _list[i].attrList.length; j++) {
+        if (_list[i].attrList[j]['checked'] == true) {
+          tempArr.add(_list[i].attrList[j]['title']);
+        }
+      }
+    }
+
+    setState(() {
+     this._selectedAttr = tempArr.join(','); 
+    });
+  }
+
+  List<Widget> _getAttrItemWidget(attrItem,setBottomState) {
     List<Widget> attrItemList = [];
 
-    attrItem.list.forEach( (item) {
-      attrItemList.add(
-        Container(
-                  margin: EdgeInsets.all(10),
-                  child: Chip(
-                    label: Text("$item"),
-                    padding: EdgeInsets.all(10),
-                  ),
-                )
-      );
+    attrItem.attrList.forEach((item) {
+      attrItemList.add(Container(
+        margin: EdgeInsets.all(10),
+        child: InkWell(
+          onTap: () {
+            this._changeAttr(attrItem.cate, item['title'],setBottomState);
+          },
+          child: Chip(
+            label: Text("${item['title']}"),
+            padding: EdgeInsets.all(10),
+            backgroundColor: item['checked'] ? Colors.red : Colors.black54,
+          ),
+        ),
+      ));
     });
 
     return attrItemList;
   }
 
   //  渲染attr
-  List<Widget> _getAttrWidget() {
+  List<Widget> _getAttrWidget(setBottomState) {
     List<Widget> attrList = [];
-    this._attr.forEach( (attrItem) {
+    this._attr.forEach((attrItem) {
       attrList.add(Wrap(
         children: <Widget>[
           Container(
             width: ScreenAdaper.width(100),
             child: Padding(
-              padding: EdgeInsets.only(
-                  top: ScreenAdaper.height(30)),
+              padding: EdgeInsets.only(top: ScreenAdaper.height(30)),
               child: Text(
                 "${attrItem.cate}",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -62,7 +138,7 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
           Container(
             width: ScreenAdaper.width(610),
             child: Wrap(
-              children: this._getAttrItemWidget(attrItem),
+              children: this._getAttrItemWidget(attrItem,setBottomState),
             ),
           ),
         ],
@@ -71,57 +147,62 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
 
     return attrList;
   }
+
   // 底部弹出框
   _attrBottomSheet() {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return GestureDetector(
-            onTap: () {
-              return false;
-            },
-            child: Stack(
-              children: <Widget>[
-                ListView(
-                  padding: EdgeInsets.all(10),
+          return StatefulBuilder(
+            builder: (BuildContext context, setBottomState) {
+              return GestureDetector(
+                onTap: () {
+                  return false;
+                },
+                child: Stack(
                   children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: this._getAttrWidget(),
-                    )
+                    ListView(
+                      padding: EdgeInsets.all(10),
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: this._getAttrWidget(setBottomState),
+                        )
+                      ],
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      width: ScreenAdaper.width(750),
+                      height: ScreenAdaper.height(76),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: JdButton(
+                              color: Color.fromRGBO(253, 1, 0, 0.9),
+                              text: "加入购物车",
+                              cb: () {
+                                print(111);
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: JdButton(
+                              color: Color.fromRGBO(253, 1, 0, 0.9),
+                              text: "加入购物车",
+                              cb: () {
+                                print(111);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-                Positioned(
-                  bottom: 0,
-                  width: ScreenAdaper.width(750),
-                  height: ScreenAdaper.height(76),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: JdButton(
-                          color: Color.fromRGBO(253, 1, 0, 0.9),
-                          text: "加入购物车",
-                          cb: () {
-                            print(111);
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: JdButton(
-                          color: Color.fromRGBO(253, 1, 0, 0.9),
-                          text: "加入购物车",
-                          cb: () {
-                            print(111);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           );
         });
   }
@@ -209,7 +290,7 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
                     "已选",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text("115, 黑色, XL, 1件"),
+                  Text("${this._selectedAttr}"),
                 ],
               ),
             ),
