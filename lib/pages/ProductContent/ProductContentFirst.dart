@@ -1,15 +1,77 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cisslab/widgets/JdButton.dart';
+import '../../widgets/JdButton.dart';
 import '../../services/ScreenAdaper.dart';
+import '../../models/ProductContent.dart';
+import '../../configs/config.dart';
 
 class ProductContentFirst extends StatefulWidget {
-  ProductContentFirst({Key key}) : super(key: key);
+  final List _productContentList;
+  ProductContentFirst(this._productContentList, {Key key}) : super(key: key);
 
   @override
   _ProductContentFirstState createState() => _ProductContentFirstState();
 }
 
 class _ProductContentFirstState extends State<ProductContentFirst> {
+  ProductContentItem _productContent;
+
+  List _attr = [];
+  @override
+  void initState() {
+    super.initState();
+    this._productContent = widget._productContentList[0];
+
+    this._attr = this._productContent.attr;
+  }
+
+  List<Widget> _getAttrItemWidget(attrItem) {
+    List<Widget> attrItemList = [];
+
+    attrItem.list.forEach( (item) {
+      attrItemList.add(
+        Container(
+                  margin: EdgeInsets.all(10),
+                  child: Chip(
+                    label: Text("$item"),
+                    padding: EdgeInsets.all(10),
+                  ),
+                )
+      );
+    });
+
+    return attrItemList;
+  }
+
+  //  渲染attr
+  List<Widget> _getAttrWidget() {
+    List<Widget> attrList = [];
+    this._attr.forEach( (attrItem) {
+      attrList.add(Wrap(
+        children: <Widget>[
+          Container(
+            width: ScreenAdaper.width(100),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  top: ScreenAdaper.height(30)),
+              child: Text(
+                "${attrItem.cate}",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Container(
+            width: ScreenAdaper.width(610),
+            child: Wrap(
+              children: this._getAttrItemWidget(attrItem),
+            ),
+          ),
+        ],
+      ));
+    });
+
+    return attrList;
+  }
+  // 底部弹出框
   _attrBottomSheet() {
     showModalBottomSheet(
         context: context,
@@ -25,44 +87,7 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
                   children: <Widget>[
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Wrap(
-                          children: <Widget>[
-                            Container(
-                              width: ScreenAdaper.width(100),
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: ScreenAdaper.height(30)),
-                                child: Text(
-                                  "颜色",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: ScreenAdaper.width(610),
-                              child: Wrap(
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Chip(
-                                      label: Text("白色"),
-                                      padding: EdgeInsets.all(10),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Chip(
-                                      label: Text("白色"),
-                                      padding: EdgeInsets.all(10),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                      children: this._getAttrWidget(),
                     )
                   ],
                 ),
@@ -103,19 +128,20 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
 
   @override
   Widget build(BuildContext context) {
+    var pic = this._productContent.pic;
+    pic = Config.apiUrl + pic.replaceAll('\\', '/');
     return Container(
       padding: EdgeInsets.all(10),
       child: ListView(
         children: <Widget>[
           AspectRatio(
             aspectRatio: 16 / 9,
-            child: Image.network("https://www.itying.com/images/flutter/p1.jpg",
-                fit: BoxFit.cover),
+            child: Image.network("${pic}", fit: BoxFit.cover),
           ),
           Container(
             padding: EdgeInsets.only(top: 10),
             child: Text(
-              "Apple iPhone 11 (A2223) 128GB 黑色 移动联通电信4G手机 双卡双待",
+              "${this._productContent.title}",
               style: TextStyle(
                 color: Colors.black87,
                 fontSize: ScreenAdaper.size(36),
@@ -125,7 +151,7 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
           Container(
             padding: EdgeInsets.only(top: 10),
             child: Text(
-              "Apple iPhone 11 (A2223) 128GB 黑色 移动联通电信4G手机 双卡双待",
+              "${this._productContent.subTitle}",
               style: TextStyle(
                 color: Colors.black54,
                 fontSize: ScreenAdaper.size(28),
@@ -142,7 +168,7 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
                     children: <Widget>[
                       Text("价格:"),
                       Text(
-                        "¥23",
+                        "¥${this._productContent.price}",
                         style: TextStyle(
                           color: Colors.red,
                           fontSize: ScreenAdaper.size(36),
@@ -158,7 +184,7 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
                     children: <Widget>[
                       Text("原价:"),
                       Text(
-                        "¥23",
+                        "¥${this._productContent.oldPrice}",
                         style: TextStyle(
                           color: Colors.black38,
                           fontSize: ScreenAdaper.size(36),
