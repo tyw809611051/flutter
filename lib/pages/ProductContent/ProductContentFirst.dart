@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cisslab/services/CartServices.dart';
 import '../../widgets/JdButton.dart';
 import '../../services/ScreenAdaper.dart';
 import '../../models/ProductContent.dart';
 import '../../configs/config.dart';
+import '../../services/EventBus.dart';
+import '../ProductContent/CartNum.dart';
 
 class ProductContentFirst extends StatefulWidget {
   final List _productContentList;
@@ -20,6 +23,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
 
   String _selectedAttr;
 
+  var actionEventBus;
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -33,7 +37,17 @@ class _ProductContentFirstState extends State<ProductContentFirst>
 
     this._initAttr();
 
-    
+   
+    this.actionEventBus = eventBus.on<ProductContentEvent>().listen( (event) {
+      print(event);
+
+    });
+  }
+
+  void dispose() {
+    super.dispose();
+
+    this.actionEventBus.cancel();
   }
 
   // 初始化attr，格式化数据
@@ -94,6 +108,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
 
     setState(() {
      this._selectedAttr = tempArr.join(','); 
+     this._productContent.selectedAttr = this._selectedAttr;
     });
   }
 
@@ -167,7 +182,25 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: this._getAttrWidget(setBottomState),
-                        )
+                        ),
+                        Divider(),
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          height: ScreenAdaper.height(80),
+                          child: InkWell(
+                            onTap: () {
+                              _attrBottomSheet();
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Text("数量",style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                )),
+                                CartNum(this._productContent),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     Positioned(
@@ -183,6 +216,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                               text: "加入购物车",
                               cb: () {
                                 print(111);
+                                CartServices.addCart(this._productContent);
                               },
                             ),
                           ),

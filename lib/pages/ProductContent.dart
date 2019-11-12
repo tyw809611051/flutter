@@ -9,6 +9,7 @@ import '../widgets/JdButton.dart';
 import '../models/ProductContent.dart';
 import '../configs/config.dart';
 import '../widgets/LoadingWidget.dart';
+import '../services/EventBus.dart';
 
 class ProductContent extends StatefulWidget {
   final Map arguments;
@@ -132,6 +133,7 @@ class _ProductContentState extends State<ProductContent> {
                         text: "加入购物车",
                         cb: () {
                           print("加入购物车");
+                          eventBus.fire(ProductContentEvent("加入"));
                         },
                       )
                     ),
