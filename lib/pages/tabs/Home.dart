@@ -298,16 +298,57 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     // ScreenAdaper.init(context);
 
-    return ListView(
-      children: <Widget>[
-        _swiperWidget(),
-        SizedBox(height: ScreenAdaper.height(20)),
-        _titleWidget("猜你喜欢"),
-        SizedBox(height: ScreenAdaper.height(20)),
-        _hotProductListWidget(),
-        _titleWidget("热门推荐"),
-        _recProductListWidget(),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.center_focus_weak),
+          onPressed: null,
+        ),
+        title: InkWell(
+          child: Container(
+            height: ScreenAdaper.height(70),
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(233, 233, 233, 0.8),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            padding: EdgeInsets.only(left: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.search),
+                Text(
+                  'jdshop',
+                  style: TextStyle(fontSize: ScreenAdaper.size(28)),
+                )
+              ],
+            ),
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, '/search');
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.message,
+              size: 28,
+              color: Colors.black87,
+            ),
+            onPressed: null,
+          )
+        ],
+      ),
+      body: ListView(
+        children: <Widget>[
+          _swiperWidget(),
+          SizedBox(height: ScreenAdaper.height(20)),
+          _titleWidget("猜你喜欢"),
+          SizedBox(height: ScreenAdaper.height(20)),
+          _hotProductListWidget(),
+          _titleWidget("热门推荐"),
+          _recProductListWidget(),
+        ],
+      ),
     );
   }
 }
