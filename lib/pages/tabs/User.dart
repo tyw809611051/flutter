@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cisslab/services/ScreenAdaper.dart';
+import 'package:flutter_cisslab/services/UserServices.dart';
 
 class UserPage extends StatefulWidget {
   UserPage({Key key}) : super(key: key);
@@ -9,6 +10,27 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  bool isLogin = false;
+  List userInfo = [];
+
+  @override
+  void initState() { 
+    super.initState();
+    
+    this._getUserinfo();
+  }
+
+  _getUserinfo() async {
+    var isLogin = await UserServices.getUserState();
+
+    var userInfo = await UserServices.getUserInfo();
+    setState(() {
+      this.userInfo = userInfo;
+
+      this.isLogin= isLogin;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
