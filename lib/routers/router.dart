@@ -5,6 +5,10 @@ import '../pages/ProductList.dart';
 import '../pages/Search.dart';
 import '../pages/ProductContent.dart';
 import '../pages/Login.dart';
+import '../pages/RegisterFirst.dart';
+import '../pages/RegisterSecond.dart';
+import '../pages/RegisterThird.dart';
+
 //配置路由 
 final routes={ 
   '/': (context) => Tabs(),
@@ -12,6 +16,9 @@ final routes={
   '/productList': (context,{arguments}) => ProductList(arguments:arguments) ,
   '/productContent': (context,{arguments}) => ProductContent(arguments:arguments) ,
   '/login': (context) => LoginPage(),
+  '/registerFirst': (context) => RegisterFirstPage(),
+  '/registerSecond': (context) => RegisterSecondPage(),
+  '/registerThird': (context) => RegisterThirdPage(),
 }; 
 
 var onGenerateRoute = (RouteSettings settings){
