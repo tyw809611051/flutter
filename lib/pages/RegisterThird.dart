@@ -4,13 +4,24 @@ import '../widgets/JdButton.dart';
 import '../services/ScreenAdaper.dart';
 
 class RegisterThirdPage extends StatefulWidget {
-  RegisterThirdPage({Key key}) : super(key: key);
+  Map arguments;
+  RegisterThirdPage({Key key,this.arguments}) : super(key: key);
 
   @override
   _RegisterThirdPageState createState() => _RegisterThirdPageState();
 }
 
 class _RegisterThirdPageState extends State<RegisterThirdPage> {
+  String tel;
+  String code;
+  String password;
+  String rpassword;
+  @override
+  void initState() { 
+    super.initState();
+    this.tel = widget.arguments['tel'];
+    this.code = widget.arguments['code'];
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
