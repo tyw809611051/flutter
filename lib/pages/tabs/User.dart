@@ -36,29 +36,34 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                 ),
-                // Expanded(
-                //   flex: 1,
-                //   child: Text("注册",style: TextStyle(
-                //     color: Colors.white
-                //   ),),
-                // ),
                 Expanded(
                   flex: 1,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text("用户名：12445534",style:TextStyle(
-                        color: Colors.white,
-                        fontSize: ScreenAdaper.size(32),
-                      )),
-                      Text("普通会员",style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ScreenAdaper.size(24),
-                      ),)
-                    ],
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    child: Text("注册/登录",style: TextStyle(
+                    color: Colors.white
+                  ),),
                   ),
                 ),
+                // Expanded(
+                //   flex: 1,
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: <Widget>[
+                //       Text("用户名：12445534",style:TextStyle(
+                //         color: Colors.white,
+                //         fontSize: ScreenAdaper.size(32),
+                //       )),
+                //       Text("普通会员",style: TextStyle(
+                //         color: Colors.white,
+                //         fontSize: ScreenAdaper.size(24),
+                //       ),)
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),
